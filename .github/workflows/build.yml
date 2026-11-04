@@ -29,6 +29,7 @@ jobs:
           pyinstaller --noconfirm --clean --onefile --windowed
           --name ArghMateyMusic
           --collect-all yt_dlp
+          --collect-data certifi
           --hidden-import PIL._tkinter_finder
           --paths src
           src/app.py
