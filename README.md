@@ -2,7 +2,7 @@
 
 Downloads the songs in a playlist spreadsheet, or a YouTube playlist or video, as tagged Opus audio files with cover art.
 
-Currently, the app in its entirety has been produced by Claude Code. It has not been looked over for correctness, doneness, effeciency, or bugs.
+**Currently, the app in its entirety has been produced by Claude Code. It has not been looked over for correctness, doneness, effeciency, or bugs.**
 
 ## Using the app
 
