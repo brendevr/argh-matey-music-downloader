@@ -1,0 +1,50 @@
+name: Build executables
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyinstaller
+
+      - name: Build executable
+        run: >
+          pyinstaller --noconfirm --clean --onefile --windowed
+          --name ArghMateyMusic
+          --collect-all yt_dlp
+          --hidden-import PIL._tkinter_finder
+          --paths src
+          src/app.py
+
+      - name: Stage release files
+        shell: bash
+        run: |
+          mkdir release
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            cp dist/ArghMateyMusic.exe release/
+          else
+            cp dist/ArghMateyMusic release/
+          fi
+          cp "EXAMPLE EXCEL SHEET.xlsx" README.md release/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ArghMateyMusic-${{ runner.os }}
+          path: release/

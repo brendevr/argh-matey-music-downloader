@@ -1,0 +1,9 @@
+.venv/
+.cache/
+OUTPUT/
+__pycache__/
+build/
+dist/
+*.spec
+*.tmp
+.claude/
