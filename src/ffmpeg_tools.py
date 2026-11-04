@@ -13,7 +13,8 @@ def find(tool: str) -> str:
 
 
 def run(command: list[str]) -> subprocess.CompletedProcess:
-    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    # ffmpeg echoes tags byte-for-byte, so a badly encoded tag must not crash the decode.
+    result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
     if result.returncode != 0:
         lines = result.stderr.strip().splitlines()
         raise RuntimeError(lines[-1] if lines else "ffmpeg failed")
