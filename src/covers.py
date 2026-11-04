@@ -1,8 +1,10 @@
 import base64
 import io
+import ssl
 import urllib.request
 from pathlib import Path
 
+import certifi
 from mutagen.flac import Picture
 from PIL import Image, ImageOps
 
@@ -10,6 +12,8 @@ from config import COVER_SIZE
 
 PREVIEW_SIZE = (150, 150)
 LETTERBOX_THRESHOLD = 24  # pixels at or below this brightness count as the black bars
+# Use certifi's CA bundle: release builds can't rely on the system's CA paths.
+SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 
 def _as_rgb(image: Image.Image) -> Image.Image:
@@ -60,7 +64,7 @@ def preview_from_cover(cover_jpeg: bytes) -> Image.Image:
 
 
 def fetch_image(url: str) -> Image.Image:
-    with urllib.request.urlopen(url, timeout=20) as response:
+    with urllib.request.urlopen(url, timeout=20, context=SSL_CONTEXT) as response:
         return Image.open(io.BytesIO(response.read())).convert("RGB")
 
 
